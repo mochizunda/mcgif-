@@ -156,7 +156,7 @@ export default function App() {
                         </Divider>
 
 
-                        <OptionItem name="背景颜色：" disabled={false}>
+                        <OptionItem name="背景颜色：" disabled={genContent === "homo"}>
                             <Stack direction="row" sx={{
                                 justifyContent: "flex-start",
                                 alignItems: "center",

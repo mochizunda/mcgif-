@@ -33,7 +33,7 @@ export default function HeaderBar() {
                             MCGIF.CN｜我的世界动图网，让你的皮肤动起来~
                         </Typography>
 
-                        <Typography variant='h5' onClick={() => setOpen(true)} sx={{ "&:hover": { textDecoration: "underline" } }}>关于本站</Typography>
+                        <Typography variant='h5' onClick={() => setOpen(true)} sx={{ "&:hover": { textDecoration: "underline" } }} style={{ cursor: 'pointer' }}>关于本站</Typography>
                     </Stack>
                 </Toolbar>
 

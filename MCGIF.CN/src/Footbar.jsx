@@ -1,7 +1,11 @@
 ﻿import { AppBar, Container, Toolbar, Stack, Typography, Link, Divider } from '@mui/material'
 
-function Bar() {
-    return <Divider orientation="vertical" flexItem sx={{ mx: 1, borderRightWidth: 1, bgcolor: '#000000' }} />;
+function Bar({ middle = false }) {
+    return <Divider orientation="vertical" variant={middle ? "middle" : ""} flexItem sx={{ mx: 1, borderRightWidth: 1, bgcolor: '#000000' }} />;
+}
+
+function TextButton({ children, onClick }) {
+    return <Typography sx={{ "&:hover": { textDecoration: "underline" } }} style={{ cursor: 'pointer' }} onClick={onClick}>{children}</Typography>;
 }
 
 export default function FootBar() {
@@ -9,6 +13,12 @@ export default function FootBar() {
         navigator.clipboard.writeText("599005767").then(() => {
             alert("已复制阿勇QQ：599005767");
         })
+    }
+
+    function OFTSClicked() {
+        navigator.clipboard.writeText("qianmuchen.sam@gmail.com").then(() => {
+            alert("已复制OFTS邮箱：qianmuchen.sam@gmail.com");
+        });
     }
 
     return (
@@ -27,23 +37,17 @@ export default function FootBar() {
                         alignItems="center"
                         sx={{ width: '100%' }}
                     >
-                        <Typography
-                            fontWeight={700}
-                            sx={{
-                                letterSpacing: '0.08em',
-                                textTransform: 'uppercase',
-                            }}
-                        >
-                            开发组：404E, OFTS_CQM, Aayong
-                        </Typography>
+                        <Typography>开发组：404E, OFTS_CQM, Aayong</Typography>
                         <Bar/>
                         <Link href="https://mccag.cn" style={{ fontSize: "1.3rem" }}>友链：mccag.cn</Link>
                         <Bar />
-                        <Typography sx={{ "&:hover": { textDecoration: "underline" } }} onClick={AayongClicked}>合作友链：Aayong</Typography>
+                        <Typography >合作友链：</Typography>
+                        <TextButton onClick={AayongClicked}>Aayong</TextButton>
+                        <Bar middle={true} />
+                        <TextButton onClick={OFTSClicked}>OFTS_CQM</TextButton>
                     </Stack>
                 </Toolbar>
             </Container>
         </AppBar>
     )
-
 }
