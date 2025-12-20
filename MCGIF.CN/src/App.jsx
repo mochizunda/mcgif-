@@ -83,7 +83,7 @@ export default function App() {
             args += "&duration=" + (Math.round((100 / speed) / 10) * 10).toString();
         } else args += "&duration=100"
 
-        fetch(`http://localhost:3001/api/render/?name=${userId}&pose=${genContent}&${args}`).then(parseGen);
+        fetch(`http://localhost:8080/api/render/?name=${userId}&pose=${genContent}&${args}`).then(parseGen);
         //fetch(`http://localhost:5173/api/render/name/${userId}/${genContent}?${args}`).then(parseGen);
     }
 
