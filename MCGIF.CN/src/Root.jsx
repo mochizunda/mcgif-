@@ -4,7 +4,6 @@ import App from './App.jsx'
 import HeaderBar from './HeaderBar.jsx'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Footbar from './Footbar'
-import './i18n';
 import { useTranslation } from 'react-i18next';
 
 function createAppTheme(lang) {
