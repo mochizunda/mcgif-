@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "net.ofts"
-version = "1.0-beta-2"
+version = "1.0.3"
 
 repositories {
     mavenCentral()

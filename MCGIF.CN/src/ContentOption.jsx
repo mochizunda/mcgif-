@@ -1,7 +1,9 @@
 import { Grid, Stack, Radio, Typography } from '@mui/material'
+import { useTranslation } from 'react-i18next';
 
-export default function ContentOption({ image, name, value, current, setValue }) {
+export default function ContentOption({ image, value, current, setValue }) {
     let properties = { borderRadius: 2, border: 2, borderColor: '#B0B0FF' }
+    const { t } = useTranslation();
 
     if (value === current) {
         properties.boxShadow = 2,
@@ -17,10 +19,10 @@ export default function ContentOption({ image, name, value, current, setValue })
                     value={value}
                     name="radio-buttons"
                     inputProps={{ 'aria-label': value }} />
-                <img src={image} alt={name} style={{ width: '100%' }} />
+                <img src={image} alt={t(`gen.${value}`)} style={{ width: '100%' }} />
             </Stack>
             <Typography variant='h5' sx={{ my: 2 }} >
-                {name}
+                {t(`gen.${value}`)}
             </Typography>
         </Grid>
     )

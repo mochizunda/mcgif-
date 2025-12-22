@@ -1,9 +1,11 @@
-﻿import { AppBar, Container, Toolbar, Stack, Typography } from '@mui/material'
+﻿import { AppBar, Container, Toolbar, Stack, Typography, Select, MenuItem } from '@mui/material'
 import Description from './Description.jsx'
 import { useState } from "react";
+import { useTranslation } from 'react-i18next';
 
 export default function HeaderBar() {
     const [open, setOpen] = useState(false);
+    const { t, i18n } = useTranslation();
 
     return (
         <AppBar
@@ -36,12 +38,25 @@ export default function HeaderBar() {
                                     letterSpacing: '0.08em',
                                     textTransform: 'uppercase',
                                 }}
-                            >
-                                MCGIF.CN｜我的世界动图网，让你的皮肤动起来~
-                            </Typography>
+                            >{t("title")}</Typography>
                         </Stack>
 
-                        <Typography variant='h5' onClick={() => setOpen(true)} sx={{ "&:hover": { textDecoration: "underline" } }} style={{ cursor: 'pointer' }}>关于本站</Typography>
+                        <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={2}>
+                            <Typography variant='h5' onClick={() => setOpen(true)} sx={{ "&:hover": { textDecoration: "underline" } }} style={{ cursor: 'pointer' }}>{t("about")}</Typography>
+
+                            <Select
+                                value={i18n.language.substring(0, 2)}
+                                onChange={(event) => i18n.changeLanguage(event.target.value)}
+                                label={t("language")}
+                            >
+                                <MenuItem value={"zh"}>中文</MenuItem>
+                                <MenuItem value={"en"}>English</MenuItem>
+                                <MenuItem value={"ja"}>日本語</MenuItem>
+                                <MenuItem value={"ko"}>한국어</MenuItem>
+                                <MenuItem value={"de"}>Deutsch</MenuItem>
+                                <MenuItem value={"ru"}>русский язык</MenuItem>
+                            </Select>
+                        </Stack>
                     </Stack>
                 </Toolbar>
 

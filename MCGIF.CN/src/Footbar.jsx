@@ -1,4 +1,5 @@
 ﻿import { AppBar, Container, Toolbar, Stack, Typography, Link, Divider } from '@mui/material'
+import { useTranslation } from 'react-i18next';
 
 function Bar({ middle = false }) {
     return <Divider orientation="vertical" variant={middle ? "middle" : ""} flexItem sx={{ mx: 1, borderRightWidth: 1, bgcolor: '#000000' }} />;
@@ -9,15 +10,17 @@ function TextButton({ children, onClick }) {
 }
 
 export default function FootBar() {
+    const { t } = useTranslation();
+
     function AayongClicked() {
         navigator.clipboard.writeText("599005767").then(() => {
-            alert("已复制阿永QQ：599005767");
+            alert(t("footer.aayong"));
         })
     }
 
     function OFTSClicked() {
         navigator.clipboard.writeText("qianmuchen.sam@gmail.com").then(() => {
-            alert("已复制OFTS邮箱：qianmuchen.sam@gmail.com");
+            alert(t("footer.ofts"));
         });
     }
 
@@ -45,7 +48,7 @@ export default function FootBar() {
                                 alignItems: "center"
                             }}
                         >
-                            <Link href="https://mccag.cn" style={{ fontSize: "1.3rem" }} color="inherit" underline="none">友情链接：mccag.cn</Link>
+                            <Link href="https://mccag.cn" style={{ fontSize: "1.3rem" }} color="inherit" underline="none">{t("footer.friend")}</Link>
                         </Stack>
                         <Stack
                             direction="row"
@@ -55,7 +58,7 @@ export default function FootBar() {
                                 alignItems: "center"
                             }}
                         >
-                            <Typography>开发人员：404E | OFTS_CQM | Aayong</Typography>
+                            <Typography>{t("footer.dev")}</Typography>
                         </Stack>
                         <Stack
                             direction="row"
@@ -65,7 +68,7 @@ export default function FootBar() {
                                 alignItems: "center"
                             }}
                         >
-                            <Typography >友链投稿：</Typography>
+                            <Typography >{t("footer.contact")}</Typography>
                             <TextButton onClick={AayongClicked}>Aayong</TextButton>
                             <Bar middle={true} />
                             <TextButton onClick={OFTSClicked}>OFTS_CQM</TextButton>
