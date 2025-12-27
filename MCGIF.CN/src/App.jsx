@@ -18,7 +18,8 @@ import {
     DialogTitle,
     DialogContent,
     DialogActions,
-    Button
+    Button,
+    Box
 } from '@mui/material';
 import { MuiColorInput } from 'mui-color-input'
 import { useState } from "react";
@@ -33,7 +34,7 @@ import head from './assets/head.png'
 import dhead from './assets/dhead.gif'
 import homo from './assets/homo.png'
 
-export default function App({theme}) {
+export default function App({ theme }) {
     const [imgSrc, setImgSrc] = useState("");
     const [errorMsg, setErrorMsg] = useState("");
     const [warnMsg, setWarnMsg] = useState("");
@@ -49,9 +50,14 @@ export default function App({theme}) {
     const [speed, setSpeed] = useState(1);
     const [pitch, setPitch] = useState(0);
     const [slim, setSlim] = useState(0);
+    const [startIndex, setStartIndex] = useState(0);
     const [mobileWarningOpen, setMobileWarningOpen] = useState(useMediaQuery(theme.breakpoints.down('sm')));
 
     const { t } = useTranslation();
+
+    const NUMBER_CONTENT = 10;
+
+    const offset = { transform: `translateX(-${startIndex * NUMBER_CONTENT }%)`, width: `${100 * NUMBER_CONTENT / 6}%`, transition: "transform 300ms ease" }
 
     function handleSlim(event) {
         setSlim(event.target.value);
@@ -128,6 +134,16 @@ export default function App({theme}) {
         document.body.removeChild(link);
     }
 
+    function contentLeft() {
+        if (startIndex == 0) return;
+        setStartIndex(startIndex - 1)
+    }
+
+    function contentRight() {
+        if (startIndex == NUMBER_CONTENT - 6) return;
+        setStartIndex(startIndex + 1)
+    }
+
     return (
         <Stack sx={{
             mb: 10,
@@ -140,169 +156,201 @@ export default function App({theme}) {
                 </DialogActions>
             </Dialog>
 
-            <Stack spacing={2} sx={{
-                width: 0.77,
-                mt: "3%",
-                ml: "10%",
-                background: `linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1))`,
-                boxShadow: 2,
-                borderRadius: 3,
-                p: 3
-            }}>
-                <Typography variant='h3'>{t("gen.title")}</Typography>
-                <Grid container spacing={2} >
-                    <ContentOption image={sneak} value='sneak' current={genContent} setValue={setGenContent} />
-                    <ContentOption image={sk} value='sk' current={genContent} setValue={setGenContent} />
-                    <ContentOption image={dsk} value='dsk' current={genContent} setValue={setGenContent} />
-                    <ContentOption image={head} value='head' current={genContent} setValue={setGenContent} />
-                    <ContentOption image={dhead} value='dhead' current={genContent} setValue={setGenContent} />
-                    <ContentOption image={homo} value='homo' current={genContent} setValue={setGenContent} />
-                </Grid>
+            <Stack sx={{ mt: "3%", alignItems: "center", }} direction="row">
+
+                <button className="contentSwitcher" onClick={contentLeft}>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.0} stroke="#AAAAFF" className="contentSVG">
+                        <defs>
+                            <filter id="blur">
+                                <feGaussianBlur stdDeviation="0.5" />
+                            </filter>
+                        </defs>
+                        <path strokeLinecap="sharp" strokeLinejoin="sharp" d="M15.75 19.5 8.25 12l7.5-7.5" filter="url(#blur)" />
+                        <path strokeLinecap="sharp" strokeLinejoin="sharp" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                    </svg>
+                </button>
+
+                <Stack spacing={2} sx={{
+                    width: 0.8,
+                    background: `linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1))`,
+                    boxShadow: "2",
+                    borderRadius: 3,
+                    p: '1%',
+                    overflow: 'hidden'
+                }}>
+                    <Typography variant='h3'>{t("gen.title")}</Typography>
+                    <Stack spacing={2} direction="row" sx={offset}>
+                        <ContentOption image={sneak} value='sneak' current={genContent} setValue={setGenContent} />
+                        <ContentOption image={homo} value='homo' current={genContent} setValue={setGenContent} />
+                        <ContentOption image={sk} value='sk' current={genContent} setValue={setGenContent} />
+                        <ContentOption image={dsk} value='dsk' current={genContent} setValue={setGenContent} />
+                        <ContentOption image={head} value='head' current={genContent} setValue={setGenContent} />
+                        <ContentOption image={dhead} value='dhead' current={genContent} setValue={setGenContent} />
+                        <ContentOption image={homo} value='homo' current={genContent} setValue={setGenContent} />
+                        <ContentOption image={homo} value='homo' current={genContent} setValue={setGenContent} />
+                        <ContentOption image={homo} value='homo' current={genContent} setValue={setGenContent} />
+                        <ContentOption image={homo} value='homo' current={genContent} setValue={setGenContent} />
+                    </Stack>
+                </Stack>
+                <button className="contentSwitcher" onClick={contentRight}>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.0} stroke="#AAAAFF" className="contentSVG" >
+                        <defs>
+                            <filter id="blur">
+                                <feGaussianBlur stdDeviation="0.5" />
+                            </filter>
+                        </defs>
+                        <path strokeLinecap="sharp" strokeLinejoin="sharp" d="m8.25 4.5 7.5 7.5-7.5 7.5" filter="url(#blur)" />
+                        <path strokeLinecap="sharp" strokeLinejoin="sharp" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                    </svg>
+
+                </button>
             </Stack>
 
-            <Grid container spacing={6} sx={{
+            <Stack spacing={2} sx={{
                 width: 0.8,
                 mt: "3%",
-                ml: "10%",
+                mx: "9%",
                 background: `linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1))`,
                 boxShadow: 2,
                 borderRadius: 3,
-                p: 3
+                p: '1%'
             }}>
-                <Grid size={6}>
-                    <Stack >
+                <Grid container spacing={2}>
+                    <Grid size={6}>
+                        <Stack >
 
-                        <input type="text" id="player-id" placeholder={t("gen.id")} value={userId} onChange={(e) => setUserId(e.target.value)} className="text-input" />
+                            <input type="text" id="player-id" placeholder={t("gen.id")} value={userId} onChange={(e) => setUserId(e.target.value)} className="text-input" />
 
-                        <button className="gen" onClick={handleGen}>{t("gen.apply")}</button>
-
-
-                        <Divider sx={{ my: 3 }} variant="h6">
-                            <Typography variant="h6">{t("config.title")}</Typography>
-                        </Divider>
+                            <button className="gen" onClick={handleGen}>{t("gen.apply")}</button>
 
 
-                        <OptionItem name="bg" disabled={genContent === "homo"} reset={() => { setBackground('#ffffff'); setTransparentBG(false) }}>
-                            <Stack direction="row" sx={{
-                                justifyContent: "flex-start",
-                                alignItems: "center",
-                            }}>
-                                <MuiColorInput format="hex" value={background} onChange={(v) => setBackground(v)} sx={{ mr: 2 }} style={
-                                    transparentBG ? {
-                                        pointerEvents: "none",
-                                        opacity: 0.5,
-                                    } : {}
-                                } />
-                                <FormGroup>
-                                    <FormControlLabel control={<Checkbox checked={transparentBG} onChange={event => setTransparentBG(event.target.checked)} />} label={t("config.transparent")} />
-                                </FormGroup>
-                            </Stack>
-                        </OptionItem>
-                        <OptionItem name="light" disabled={false} reset={() => { setLight('#ffffff'); setIgnoreLight(false) }}>
-                            <Stack direction="row" sx={{
-                                justifyContent: "flex-start",
-                                alignItems: "center",
-                            }}>
-                                <MuiColorInput format="hex" value={light} onChange={(v) => setLight(v)} sx={{ mr: 2 }} style={
-                                    ignoreLight ? {
-                                        pointerEvents: "none",
-                                        opacity: 0.5,
-                                    } : {}
-                                } />
-                                <FormGroup>
-                                    <FormControlLabel control={<Checkbox checked={ignoreLight} onChange={event => setIgnoreLight(event.target.checked)} />} label={t("config.transparent")} />
-                                </FormGroup>
-                            </Stack>
-                        </OptionItem>
-                        <OptionItem name="head" disabled={genContent === "head" || genContent === "dhead"} reset={() => setHeadSize(1)}>
-                            <Slider
-                                min={0}
-                                max={5}
-                                value={headSize}
-                                onChange={(e, v) => setHeadSize(v)}
-                                step={0.01 }
-                                valueLabelDisplay="auto"
-                                valueLabelFormat={(value) => `${~~(value * 100)}%`}
-                            />
-                        </OptionItem>
-                        <OptionItem name="speed" disabled={genContent !== "dsk" && genContent !== "sneak" && genContent !== "dhead"} reset={() => setSpeed(1)}>
-                            <Slider
-                                min={0.3}
-                                max={5}
-                                value={speed}
-                                onChange={(e, v) => setSpeed(v)}
-                                step={0.01}
-                                valueLabelDisplay="auto"
-                                valueLabelFormat={(value) => `${~~(value * 100)}%`}
-                            />
-                        </OptionItem>
-                        <OptionItem name="pitch" disabled={genContent !== "dsk" && genContent !== "dhead"} reset={() => setPitch(0)}>
-                            <Slider
-                                min={-90}
-                                max={90}
-                                value={pitch}
-                                onChange={(e, v) => setPitch(v)}
-                                valueLabelDisplay="auto"
-                            />
-                        </OptionItem>
-                        <OptionItem name="slim" disabled={genContent === "head" || genContent === "dhead" || genContent === "homo"} reset={() => setSlim(0)}>
-                            <FormControl>
-                                <RadioGroup
-                                    row
-                                    aria-labelledby="demo-row-radio-buttons-group-label"
-                                    name="row-radio-buttons-group"
-                                    defaultValue="0"
-                                    value={slim}
-                                    onChange={handleSlim}
-                                >
-                                    <FormControlLabel value="0" control={<Radio />} label={t("model.default")} />
-                                    <FormControlLabel value="1" control={<Radio />} label={t("model.standard")} />
-                                    <FormControlLabel value="2" control={<Radio />} label={t("model.slim")} />
-                                </RadioGroup>
-                            </FormControl>
-                        </OptionItem>
-                    </Stack>
+                            <Divider sx={{ my: 3 }} variant="h6">
+                                <Typography variant="h6">{t("config.title")}</Typography>
+                            </Divider>
 
-                </Grid>
 
-                <Grid size={6} sx={{
-                    background: `linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1))`,
-                    boxShadow: 2,
-                    borderRadius: 1,
-                    p: 2,
-                }}
-                >
-                    <Stack direction="row" sx={{
-                        justifyContent: "flex-start",
-                        alignItems: "center",
-                    }}>
-                        <Typography variant="h4" align="left" sx={{ my: 2 }}>{t("message.view")}</Typography>
+                            <OptionItem name="bg" disabled={genContent === "homo"} reset={() => { setBackground('#ffffff'); setTransparentBG(false) }}>
+                                <Stack direction="row" sx={{
+                                    justifyContent: "flex-start",
+                                    alignItems: "center",
+                                }}>
+                                    <MuiColorInput format="hex" value={background} onChange={(v) => setBackground(v)} sx={{ mr: 2 }} style={
+                                        transparentBG ? {
+                                            pointerEvents: "none",
+                                            opacity: 0.5,
+                                        } : {}
+                                    } />
+                                    <FormGroup>
+                                        <FormControlLabel control={<Checkbox checked={transparentBG} onChange={event => setTransparentBG(event.target.checked)} />} label={t("config.transparent")} />
+                                    </FormGroup>
+                                </Stack>
+                            </OptionItem>
+                            <OptionItem name="light" disabled={false} reset={() => { setLight('#ffffff'); setIgnoreLight(false) }}>
+                                <Stack direction="row" sx={{
+                                    justifyContent: "flex-start",
+                                    alignItems: "center",
+                                }}>
+                                    <MuiColorInput format="hex" value={light} onChange={(v) => setLight(v)} sx={{ mr: 2 }} style={
+                                        ignoreLight ? {
+                                            pointerEvents: "none",
+                                            opacity: 0.5,
+                                        } : {}
+                                    } />
+                                    <FormGroup>
+                                        <FormControlLabel control={<Checkbox checked={ignoreLight} onChange={event => setIgnoreLight(event.target.checked)} />} label={t("config.transparent")} />
+                                    </FormGroup>
+                                </Stack>
+                            </OptionItem>
+                            <OptionItem name="head" disabled={genContent === "head" || genContent === "dhead"} reset={() => setHeadSize(1)}>
+                                <Slider
+                                    min={0}
+                                    max={5}
+                                    value={headSize}
+                                    onChange={(e, v) => setHeadSize(v)}
+                                    step={0.01}
+                                    valueLabelDisplay="auto"
+                                    valueLabelFormat={(value) => `${~~(value * 100)}%`}
+                                />
+                            </OptionItem>
+                            <OptionItem name="speed" disabled={genContent !== "dsk" && genContent !== "sneak" && genContent !== "dhead"} reset={() => setSpeed(1)}>
+                                <Slider
+                                    min={0.3}
+                                    max={5}
+                                    value={speed}
+                                    onChange={(e, v) => setSpeed(v)}
+                                    step={0.01}
+                                    valueLabelDisplay="auto"
+                                    valueLabelFormat={(value) => `${~~(value * 100)}%`}
+                                />
+                            </OptionItem>
+                            <OptionItem name="pitch" disabled={genContent !== "dsk" && genContent !== "dhead"} reset={() => setPitch(0)}>
+                                <Slider
+                                    min={-90}
+                                    max={90}
+                                    value={pitch}
+                                    onChange={(e, v) => setPitch(v)}
+                                    valueLabelDisplay="auto"
+                                />
+                            </OptionItem>
+                            <OptionItem name="slim" disabled={genContent === "head" || genContent === "dhead" || genContent === "homo"} reset={() => setSlim(0)}>
+                                <FormControl>
+                                    <RadioGroup
+                                        row
+                                        aria-labelledby="demo-row-radio-buttons-group-label"
+                                        name="row-radio-buttons-group"
+                                        defaultValue="0"
+                                        value={slim}
+                                        onChange={handleSlim}
+                                    >
+                                        <FormControlLabel value="0" control={<Radio />} label={t("model.default")} />
+                                        <FormControlLabel value="1" control={<Radio />} label={t("model.standard")} />
+                                        <FormControlLabel value="2" control={<Radio />} label={t("model.slim")} />
+                                    </RadioGroup>
+                                </FormControl>
+                            </OptionItem>
+                        </Stack>
 
-                        <button className="Btn" onClick={handleDownload}>
-                            <svg className="svgIcon" viewBox="0 0 384 512" height="1em" xmlns="http://www.w3.org/2000/svg"><path d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>
-                            <span className="icon2"></span>
-                            <span className="tooltip">{t("message.download")}</span>
-                        </button>
-                    </Stack>
+                    </Grid>
 
-                    {warnMsg !== "" && <Alert severity="warning">{warnMsg}</Alert>}
-                    {errorMsg === "" && imgSrc !== "" && imgSrc !== "w" && <img src={imgSrc} alt="Generated Content" style={{ maxWidth: '100%', maxHeight: '50vh'}} />}
-                    {errorMsg === "" && imgSrc === "" && <Typography sx={{ my: 10 }}>{t("message.info")}</Typography>}
-                    {errorMsg === "" && imgSrc === "w" && <Typography variant="h6" sx={{ mt: 20 }}>{t("message.warn1")}</Typography>}
-                    {errorMsg === "" && imgSrc === "w" && <Typography variant="h6" sx={{ mb: 20 }}>{t("message.warn2")}</Typography>}
-                    {errorMsg !== "" && <Paper
-                        sx={{
-                            background: `linear-gradient(135deg, rgba(255, 102, 102, 0.1), rgba(162, 75, 75, 0.1))`,
-                            height: '70%',
-                            display: "grid",
-                            placeItems: "center", // centers both vertically & horizontally
-                            p: 2
-                        }}
+                    <Grid size={6} sx={{
+                        background: `linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1))`,
+                        boxShadow: 2,
+                        borderRadius: 1,
+                        p: 2,
+                    }}
                     >
-                        <Typography variant="h6" align="center" sx={{ height: '100%' }}>{errorMsg}</Typography>
-                    </Paper>}
+                        <Stack direction="row" sx={{
+                            justifyContent: "flex-start",
+                            alignItems: "center",
+                        }}>
+                            <Typography variant="h4" align="left" sx={{ my: 2 }}>{t("message.view")}</Typography>
+
+                            <button className="Btn" onClick={handleDownload}>
+                                <svg className="svgIcon" viewBox="0 0 384 512" height="1em" xmlns="http://www.w3.org/2000/svg"><path d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>
+                                <span className="icon2"></span>
+                                <span className="tooltip">{t("message.download")}</span>
+                            </button>
+                        </Stack>
+
+                        {warnMsg !== "" && <Alert severity="warning">{warnMsg}</Alert>}
+                        {errorMsg === "" && imgSrc !== "" && imgSrc !== "w" && <img src={imgSrc} alt="Generated Content" style={{ maxWidth: '100%', maxHeight: '50vh' }} />}
+                        {errorMsg === "" && imgSrc === "" && <Typography sx={{ my: 10 }}>{t("message.info")}</Typography>}
+                        {errorMsg === "" && imgSrc === "w" && <Typography variant="h6" sx={{ mt: 20 }}>{t("message.warn1")}</Typography>}
+                        {errorMsg === "" && imgSrc === "w" && <Typography variant="h6" sx={{ mb: 20 }}>{t("message.warn2")}</Typography>}
+                        {errorMsg !== "" && <Paper
+                            sx={{
+                                background: `linear-gradient(135deg, rgba(255, 102, 102, 0.1), rgba(162, 75, 75, 0.1))`,
+                                height: '70%',
+                                display: "grid",
+                                placeItems: "center", // centers both vertically & horizontally
+                                p: 2
+                            }}
+                        >
+                            <Typography variant="h6" align="center" sx={{ height: '100%' }}>{errorMsg}</Typography>
+                        </Paper>}
+                    </Grid>
                 </Grid>
-            </Grid>
+            </Stack>
         </Stack>
     );
 }

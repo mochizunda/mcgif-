@@ -153,6 +153,27 @@ body {
         transform: scale(0.9);
     }
 
+.contentSwitcher {
+    border: none;
+    width: 9%;
+    padding: 0;
+    background-color: transparent;
+}
+
+    .contentSwitcher:focus {
+        outline: none;
+    }
+
+    .contentSwitcher .contentSVG {
+        margin: 10%;
+        transition: margin 100ms ease
+    }
+
+    .contentSwitcher:hover .contentSVG {
+        margin: 0;
+        transition: margin 100ms ease
+    }
+
 /* From Uiverse.io by vinodjangid07 */
 .Btn {
     width: 50px;
