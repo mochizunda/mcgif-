@@ -18,8 +18,7 @@ import {
     DialogTitle,
     DialogContent,
     DialogActions,
-    Button,
-    Box
+    Button
 } from '@mui/material';
 import { MuiColorInput } from 'mui-color-input'
 import { useState } from "react";
@@ -33,6 +32,37 @@ import dsk from './assets/dsk.gif'
 import head from './assets/head.png'
 import dhead from './assets/dhead.gif'
 import homo from './assets/homo.png'
+import litang from './assets/litang.png'
+import hip from './assets/hip.gif'
+import temple from './assets/temple.png'
+import trump from './assets/trump.png'
+
+class GenContentProfile {
+    constructor(img, name, hasBG, hasHead, hasSpeed, hasPitch, hasModel) {
+        this.img = img;
+        this.name = name;
+        this.hasBG = hasBG;
+        this.hasHead = hasHead;
+        this.hasSpeed = hasSpeed;
+        this.hasPitch = hasPitch;
+        this.hasModel = hasModel;
+    }
+}
+
+const allContents = [
+    new GenContentProfile(sneak, 'sneak', true, true, true, false, true),
+    new GenContentProfile(hip, 'hip', true, true, true, false, true, ),
+    new GenContentProfile(sk, 'sk', true, true, false, false, true),
+    new GenContentProfile(dsk, 'dsk', true, true, true, true, true),
+    new GenContentProfile(head, 'head', false, true, false, false, false),
+    new GenContentProfile(dhead, 'dhead', false, true, true, true, false),
+    new GenContentProfile(homo, 'homo', false, true, false, false, true),
+    new GenContentProfile(trump, 'trump', false, true, false, false, true),
+    new GenContentProfile(temple, 'temple', false, true, false, false, true),
+    new GenContentProfile(litang, 'litang', false, true, false, false, true)
+]
+
+const NUMBER_CONTENT = allContents.length;
 
 export default function App({ theme }) {
     const [imgSrc, setImgSrc] = useState("");
@@ -52,15 +82,19 @@ export default function App({ theme }) {
     const [slim, setSlim] = useState(0);
     const [startIndex, setStartIndex] = useState(0);
     const [mobileWarningOpen, setMobileWarningOpen] = useState(useMediaQuery(theme.breakpoints.down('sm')));
+    const [currentGenProfile, setCurrentGenProfile] = useState(allContents[0]);
 
     const { t } = useTranslation();
-
-    const NUMBER_CONTENT = 10;
 
     const offset = { transform: `translateX(-${startIndex * NUMBER_CONTENT }%)`, width: `${100 * NUMBER_CONTENT / 6}%`, transition: "transform 300ms ease" }
 
     function handleSlim(event) {
         setSlim(event.target.value);
+    }
+
+    function setCurrentGen(profile) {
+        setCurrentGenProfile(profile);
+        setGenContent(profile.name);
     }
 
     async function parseGen(res) {
@@ -113,8 +147,8 @@ export default function App({ theme }) {
             args += "&duration=" + (Math.round((100 / speed) / 10) * 10).toString();
         } else args += "&duration=100"
 
-        fetch(`/api/render/?name=${userId}&pose=${genContent}&${args}`).then(parseGen);
-        //fetch(`http://localhost:5173/api/render/name/${userId}/${genContent}?${args}`).then(parseGen);
+        //fetch(`/api/render/?name=${userId}&pose=${genContent}&${args}`).then(parseGen);
+        fetch(`/render/name/${userId}/${genContent}?${args}`).then(parseGen);
     }
 
     function handleDownload() {
@@ -180,16 +214,9 @@ export default function App({ theme }) {
                 }}>
                     <Typography variant='h3'>{t("gen.title")}</Typography>
                     <Stack spacing={2} direction="row" sx={offset}>
-                        <ContentOption image={sneak} value='sneak' current={genContent} setValue={setGenContent} />
-                        <ContentOption image={homo} value='homo' current={genContent} setValue={setGenContent} />
-                        <ContentOption image={sk} value='sk' current={genContent} setValue={setGenContent} />
-                        <ContentOption image={dsk} value='dsk' current={genContent} setValue={setGenContent} />
-                        <ContentOption image={head} value='head' current={genContent} setValue={setGenContent} />
-                        <ContentOption image={dhead} value='dhead' current={genContent} setValue={setGenContent} />
-                        <ContentOption image={homo} value='homo' current={genContent} setValue={setGenContent} />
-                        <ContentOption image={homo} value='homo' current={genContent} setValue={setGenContent} />
-                        <ContentOption image={homo} value='homo' current={genContent} setValue={setGenContent} />
-                        <ContentOption image={homo} value='homo' current={genContent} setValue={setGenContent} />
+                        {
+                            allContents.map((content) => (<ContentOption key={content.name} value={content} current={genContent} setValue={setCurrentGen} />))
+                        }
                     </Stack>
                 </Stack>
                 <button className="contentSwitcher" onClick={contentRight}>
@@ -229,7 +256,7 @@ export default function App({ theme }) {
                             </Divider>
 
 
-                            <OptionItem name="bg" disabled={genContent === "homo"} reset={() => { setBackground('#ffffff'); setTransparentBG(false) }}>
+                            <OptionItem name="bg" enable={currentGenProfile.hasBG} reset={() => { setBackground('#ffffff'); setTransparentBG(false) }}>
                                 <Stack direction="row" sx={{
                                     justifyContent: "flex-start",
                                     alignItems: "center",
@@ -245,7 +272,7 @@ export default function App({ theme }) {
                                     </FormGroup>
                                 </Stack>
                             </OptionItem>
-                            <OptionItem name="light" disabled={false} reset={() => { setLight('#ffffff'); setIgnoreLight(false) }}>
+                            <OptionItem name="light" enabled={true} reset={() => { setLight('#ffffff'); setIgnoreLight(false) }}>
                                 <Stack direction="row" sx={{
                                     justifyContent: "flex-start",
                                     alignItems: "center",
@@ -261,7 +288,7 @@ export default function App({ theme }) {
                                     </FormGroup>
                                 </Stack>
                             </OptionItem>
-                            <OptionItem name="head" disabled={genContent === "head" || genContent === "dhead"} reset={() => setHeadSize(1)}>
+                            <OptionItem name="head" enable={currentGenProfile.hasHead} reset={() => setHeadSize(1)}>
                                 <Slider
                                     min={0}
                                     max={5}
@@ -272,7 +299,7 @@ export default function App({ theme }) {
                                     valueLabelFormat={(value) => `${~~(value * 100)}%`}
                                 />
                             </OptionItem>
-                            <OptionItem name="speed" disabled={genContent !== "dsk" && genContent !== "sneak" && genContent !== "dhead"} reset={() => setSpeed(1)}>
+                            <OptionItem name="speed" enable={currentGenProfile.hasSpeed} reset={() => setSpeed(1)}>
                                 <Slider
                                     min={0.3}
                                     max={5}
@@ -283,7 +310,7 @@ export default function App({ theme }) {
                                     valueLabelFormat={(value) => `${~~(value * 100)}%`}
                                 />
                             </OptionItem>
-                            <OptionItem name="pitch" disabled={genContent !== "dsk" && genContent !== "dhead"} reset={() => setPitch(0)}>
+                            <OptionItem name="pitch" enable={currentGenProfile.hasPitch} reset={() => setPitch(0)}>
                                 <Slider
                                     min={-90}
                                     max={90}
@@ -292,7 +319,7 @@ export default function App({ theme }) {
                                     valueLabelDisplay="auto"
                                 />
                             </OptionItem>
-                            <OptionItem name="slim" disabled={genContent === "head" || genContent === "dhead" || genContent === "homo"} reset={() => setSlim(0)}>
+                            <OptionItem name="slim" enable={currentGenProfile.hasModel} reset={() => setSlim(0)}>
                                 <FormControl>
                                     <RadioGroup
                                         row

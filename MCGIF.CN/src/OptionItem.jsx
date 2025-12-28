@@ -1,7 +1,7 @@
 ﻿import { Grid, Box, Typography, Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-export default function OptionItem({ name, children, disabled, reset }) {
+export default function OptionItem({ name, children, enable, reset }) {
     const { t } = useTranslation();
 
     return (
@@ -18,11 +18,11 @@ export default function OptionItem({ name, children, disabled, reset }) {
                     {children}
                 </Grid>
                 <Grid size={2} >
-                    <Button variant="outlined" onClick={reset} disabled={disabled} sx={{maxWidth: '100%'}}>{t("config.reset")}</Button>
+                    <Button variant="outlined" onClick={reset} disabled={!enable} sx={{maxWidth: '100%'}}>{t("config.reset")}</Button>
                 </Grid>
             </Grid>
 
-            {disabled && (
+            {!enable && (
                 <Box
                     sx={{
                         position: 'absolute',
