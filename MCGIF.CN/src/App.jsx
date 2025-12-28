@@ -290,9 +290,9 @@ export default function App() {
                             </div>
                         </OptionItem>
 
-                        <OptionItem name="light" reset={() => { setLight('#ffffff'); setIgnoreLight(false) }}>
+                        <OptionItem name="light" enable={true} reset={() => { setLight('#ffffff'); setIgnoreLight(false) }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '16px', width: '100%', justifyContent: 'space-between' }}>
-                                {(!transparentBG && !ignoreLight) ? (
+                                {!ignoreLight ? (
                                     <div className="color-input-container">
                                         <div className="color-preview" style={{ backgroundColor: light }}>
                                             <input
@@ -314,7 +314,6 @@ export default function App() {
                                     <mdui-switch
                                         checked={ignoreLight}
                                         onChange={(e) => setIgnoreLight(e.target.checked)}
-                                        disabled={transparentBG}
                                     ></mdui-switch>
                                 </div>
                             </div>
